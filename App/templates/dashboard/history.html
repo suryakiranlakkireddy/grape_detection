@@ -1,0 +1,73 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block content %}
+
+<a href="/my-predictions/" class="btn btn-dark mt-4 mb-4">
+    My Predictions
+</a>
+
+<!-- Charts Row -->
+<div class="row">
+
+    <div class="col-md-6 mb-4">
+        <canvas id="barChart"></canvas>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <canvas id="pieChart"></canvas>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <canvas id="lineChart"></canvas>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <canvas id="histChart"></canvas>
+    </div>
+
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const labels = {{ labels|safe }};
+    const data = {{ data|safe }};
+
+    const dataset = {
+        labels: labels,
+        datasets: [{
+            label: 'Prediction Count',
+            data: data,
+            backgroundColor: [
+                '#0d6efd', '#198754', '#dc3545', '#ffc107', '#6f42c1'
+            ]
+        }]
+    };
+
+    // 🔵 Bar Chart
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: dataset
+    });
+
+    // 🟣 Pie Chart
+    new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: dataset
+    });
+
+    // 🟢 Line Chart
+    new Chart(document.getElementById('lineChart'), {
+        type: 'line',
+        data: dataset
+    });
+
+    // 🟠 Histogram (same as bar for class counts)
+    new Chart(document.getElementById('histChart'), {
+        type: 'bar',
+        data: dataset
+    });
+</script>
+
+{% endblock %}

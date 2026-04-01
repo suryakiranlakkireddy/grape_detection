@@ -1,0 +1,55 @@
+{% extends 'dashboard/base_dashboard.html' %} {% block content %}
+<div class="container mt-4">
+  <h3>Disease Detection</h3>
+
+  <div class="card p-4 shadow-sm mb-4">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label fw-bold">Upload Leaf Image</label>
+        <input
+          type="file"
+          name="image_file"
+          class="form-control"
+          accept="image/*"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-success">Analyze Leaf</button>
+    </form>
+  </div>
+
+  {% if result %}
+  <div class="card shadow border-success">
+    <div class="card-header bg-success text-white">
+      <h5 class="mb-0">Analysis Complete</h5>
+    </div>
+    <div class="row g-0">
+      <div class="col-md-4 p-3 text-center border-end">
+        <p class="text-muted small mb-2">Processed Image</p>
+        {% if image_url %}
+        <img
+          src="{{ image_url }}"
+          class="img-fluid rounded shadow-sm"
+          alt="Analyzed Leaf"
+          style="max-height: 250px"
+        />
+        {% else %}
+        <div class="alert alert-warning">Image path not found</div>
+        {% endif %}
+      </div>
+      <div class="col-md-8 p-4 d-flex flex-column justify-content-center">
+        <h6 class="text-uppercase text-muted ls-1">Detected Condition:</h6>
+        <h2 class="text-success fw-bold">{{ result }}</h2>
+        <hr />
+        <p class="mb-0">
+          The AI model has identified symptoms consistent with
+          <strong>{{ result }}</strong>. Please consult with an agronomist for
+          treatment protocols.
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

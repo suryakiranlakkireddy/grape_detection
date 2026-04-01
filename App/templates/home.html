@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 15px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+        }
+
+        header h2 {
+            color: #1e3c72;
+        }
+
+        nav a {
+            text-decoration: none;
+            margin-left: 25px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: #1e3c72;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border-radius: 5px;
+            border: 1px solid #1e3c72;
+        }
+
+        .btn-primary {
+            background: #1e3c72;
+            color: #fff;
+        }
+
+        .section {
+            padding: 70px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            color: #ffffff;
+            font-size: 42px;
+        }
+
+        .card {
+            background: #ffffff;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            text-align: left;
+        }
+
+        .card h3 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .card p {
+            line-height: 1.7;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .adv-box {
+            background: #f4f6fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .adv-box h4 {
+            margin-bottom: 10px;
+            color: #1e3c72;
+        }
+
+        footer {
+            background: #111;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>Build. Predict. Analyze. Grow.</h2>
+    <nav>
+        <a href="/">Home</a>
+        <!-- <a href="#about">About</a>
+        <a href="#advantages">Advantages</a>
+        <a href="#impact">Impact</a> -->
+        <a href="/login/" class="btn">Login</a>
+        <a href="/register/" class="btn btn-primary">Register</a>
+    </nav>
+</header>
+
+<!-- HERO SECTION -->
+<section class="section hero" id="home">
+    <h1>Disease Detection in Grape cultivation using strategically placed carners and machine learning algorithms with a focus on powdery mildew and blotches</h1>
+</section>
+
+<!-- ABSTRACT -->
+<section class="section" id="about">
+    <div class="card">
+        <h3>Project Abstract</h3>
+        <p>Plant diseases significantly affect agricultural productivity and can lead to major economic losses if not detected at an early stage. In grape cultivation, diseases such as powdery mildew and leaf blotches are among the most common factors that reduce crop quality and yield. Traditional disease detection methods rely on manual observation by farmers or experts, which is time-consuming, labor-intensive, and often inaccurate under varying environmental conditions. The base research work proposes an automated disease detection system that utilizes strategically placed cameras and machine learning techniques to identify grape leaf diseases. The existing system employs image preprocessing techniques such as Histogram Oriented Gradient (HOG) and applies multiple machine learning and deep learning algorithms including Convolutional Neural Networks (CNN), Support Vector Machines (SVM), Random Forest (RF), Decision Tree (DT), and Naive Bayes (NB). A stacking algorithm is used to select the most effective model, where CNN demonstrates superior performance in classifying diseased and healthy grape leaves.
+            This work extends the existing system by introducing a hybrid deep learning approach that integrates multiple transfer learning architectures to improve feature extraction and classification accuracy. The extended system utilizes pretrained deep convolutional neural networks including VGG16, VGG19, ResNet, and Inception models as feature extractors. The extracted deep features from these architectures are combined through an ensemble learning strategy using feature-level fusion. The concatenated feature representations are passed through fully connected layers to perform multi-class disease classification. This hybrid ensemble model leverages the strengths of multiple deep architectures, enabling the system to capture diverse image features and improve generalization capability.
+            The extended approach is trained and evaluated on a labeled plant leaf disease dataset using image preprocessing techniques such as resizing and normalization. Experimental results demonstrate that the hybrid ensemble model improves classification performance compared to individual deep learning models and the original basepaper architecture. The proposed extended system provides a more robust and scalable solution for automated grape leaf disease detection and can support smart agriculture applications by enabling early diagnosis and timely intervention.
+            </p>
+    </div>
+</section>
+
+<!-- ADVANTAGES -->
+<section class="section" id="advantages">
+    <div class="card">
+        <h3>Advantages of the Project</h3>
+        <div class="advantages-grid">
+            <div class="adv-box">
+                <h4>⚡ Fast Decision Making</h4>
+                <p>Provides real-time analytics to improve business and research decisions.</p>
+            </div>
+            <div class="adv-box">
+                <h4>📊 Accurate Predictions</h4>
+                <p>Uses AI models to generate reliable and data-driven predictions.</p>
+            </div>
+            <div class="adv-box">
+                <h4>🔒 Secure & Scalable</h4>
+                <p>Designed with modern security standards and scalable architecture.</p>
+            </div>
+            <div class="adv-box">
+                <h4>🌐 Easy Accessibility</h4>
+                <p>Web-based platform accessible from anywhere with a simple interface.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SOCIETY IMPACT -->
+<section class="section" id="impact">
+    <div class="card">
+        <h3>How It Helps Current Society</h3>
+        <p>
+            In today's data-driven world, organizations require intelligent systems to analyze
+            large amounts of information. This platform supports industries like healthcare,
+            education, finance, and agriculture by enabling smarter decisions.
+        </p>
+        <p>
+            It empowers startups, researchers, and students by providing AI tools without requiring
+            deep technical expertise, helping democratize artificial intelligence for societal growth.
+        </p>
+    </div>
+</section>
+
+
+</body>
+</html>

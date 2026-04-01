@@ -1,0 +1,46 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block content %}
+
+<h3>My Previous Predictions</h3>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Input</th>
+            <th>Result</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for p in predictions %}
+        <tr>
+
+            <!-- Show JSON input only if exists -->
+            <td>
+                {% if p.input_data %}
+                    {{ p.input_data }}
+                {% elif p.input_file %}
+                    <a href="{{ p.input_file.url }}" target="_blank">View File</a>
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <!-- Prediction -->
+            <td>{{ p.predicted_class }}</td>
+
+            <!-- Date -->
+            <td>{{ p.created_at }}</td>
+
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="3" class="text-center">No predictions found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
