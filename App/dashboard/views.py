@@ -1,4 +1,5 @@
-import io 
+import io
+import json
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import Prediction
@@ -13,10 +14,18 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 # Load model and classes once
 MODEL_PATH = os.path.join(settings.BASE_DIR, 'model/ensemble_model.h5')
-DATASET_DIR = os.path.join(settings.BASE_DIR, 'model/dataset')
+CLASS_NAMES_PATH = os.path.join(settings.BASE_DIR, 'model/class_names.json')
 
-model = load_model(MODEL_PATH)
-class_names = sorted(os.listdir(DATASET_DIR)) if os.path.exists(DATASET_DIR) else []
+# Load class names from JSON file
+with open(CLASS_NAMES_PATH, 'r') as f:
+    class_names = json.load(f)
+
+# Load ML model (may fail if .h5 file is not present)
+try:
+    model = load_model(MODEL_PATH)
+except Exception as e:
+    print(f"Warning: Could not load model: {e}")
+    model = None
 
 def preprocess_image(image_file):
     # Wrap the uploaded file in a BytesIO stream
