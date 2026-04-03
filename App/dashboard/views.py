@@ -9,25 +9,32 @@ from django.core.files.base import ContentFile
 import os
 import numpy as np
 from django.conf import settings
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
-
-# Load model and classes once
-MODEL_PATH = os.path.join(settings.BASE_DIR, 'model/ensemble_model.h5')
-CLASS_NAMES_PATH = os.path.join(settings.BASE_DIR, 'model/class_names.json')
 
 # Load class names from JSON file
-with open(CLASS_NAMES_PATH, 'r') as f:
-    class_names = json.load(f)
-
-# Load ML model (may fail if .h5 file is not present)
+CLASS_NAMES_PATH = os.path.join(settings.BASE_DIR, 'model/class_names.json')
 try:
-    model = load_model(MODEL_PATH)
-except Exception as e:
-    print(f"Warning: Could not load model: {e}")
-    model = None
+    with open(CLASS_NAMES_PATH, 'r') as f:
+        class_names = json.load(f)
+except Exception:
+    class_names = []
+
+# Lazy model loading - only load when needed
+_model = None
+
+def get_model():
+    global _model
+    if _model is None:
+        try:
+            from tensorflow.keras.models import load_model
+            MODEL_PATH = os.path.join(settings.BASE_DIR, 'model/ensemble_model.h5')
+            _model = load_model(MODEL_PATH)
+        except Exception as e:
+            print(f"Warning: Could not load model: {e}")
+            return None
+    return _model
 
 def preprocess_image(image_file):
+    from tensorflow.keras.preprocessing.image import load_img, img_to_array
     # Wrap the uploaded file in a BytesIO stream
     img_bytes = io.BytesIO(image_file.read())
     
@@ -48,37 +55,43 @@ def dashboard_view(request):
 def predict_view(request):
     result = None
     image_url = None  # Initialize to None
+    error_msg = None
     
     if request.method == 'POST':
         image_file = request.FILES.get('image_file')
         
         if image_file:
-            # 1. Prediction Logic
-            processed_img = preprocess_image(image_file)
-            prediction_probs = model.predict(processed_img)
-            predicted_idx = np.argmax(prediction_probs)
-            
-            # Clean up the class name for display
-            raw_result = class_names[predicted_idx] if class_names else "Unknown"
-            result = raw_result.replace("_", " ") 
+            model = get_model()
+            if model is None:
+                error_msg = "ML model is not available. Please upload ensemble_model.h5 to the model/ directory."
+            else:
+                # 1. Prediction Logic
+                processed_img = preprocess_image(image_file)
+                prediction_probs = model.predict(processed_img)
+                predicted_idx = np.argmax(prediction_probs)
+                
+                # Clean up the class name for display
+                raw_result = class_names[predicted_idx] if class_names else "Unknown"
+                result = raw_result.replace("_", " ") 
 
-            # 2. Save to Database
-            # Django handles saving the file to MEDIA_ROOT/inputs/ here
-            new_pred = Prediction(
-                user=request.user,
-                input_file=image_file,
-                predicted_class=raw_result,
-                confidence=float(np.max(prediction_probs))
-            )
-            new_pred.save()
-            
-            # 3. Capture the URL for the template
-            image_url = new_pred.input_file.url
+                # 2. Save to Database
+                # Django handles saving the file to MEDIA_ROOT/inputs/ here
+                new_pred = Prediction(
+                    user=request.user,
+                    input_file=image_file,
+                    predicted_class=raw_result,
+                    confidence=float(np.max(prediction_probs))
+                )
+                new_pred.save()
+                
+                # 3. Capture the URL for the template
+                image_url = new_pred.input_file.url
 
     # Ensure both result AND image_url are in the context
     context = {
         'result': result,
         'image_url': image_url,
+        'error_msg': error_msg,
     }
     return render(request, 'dashboard/predict.html', context)
 
@@ -103,3 +116,4 @@ def profile_page(request):
 def my_predictions(request):
     predictions = Prediction.objects.filter(user=request.user)
     return render(request, 'dashboard/my_predictions.html', {'predictions': predictions})
+
